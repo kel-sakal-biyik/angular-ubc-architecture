@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import * as cors from 'cors';
 
 import { Application } from 'express';
 import {
@@ -12,12 +13,15 @@ import {
 import getSchema from './gql/schema';
 
 const app: Application = express();
-const APP_ROOT: string = '/gql-ubc-1';
+const APP_ROOT: string = '/gql-ubc-2';
 const defaultQuery =
   `{
-  location {
-    latitude
-    longitude
+  address {
+    country
+    city
+    zip
+    street
+    address
   }  
 }`;
 const schema: any = getSchema();
@@ -34,7 +38,7 @@ app
   }));
 
 app
-  .use(APP_ROOT, graphqlExpress(request => {
+  .use(APP_ROOT, cors(), graphqlExpress(request => {
     const query = request.query.query || request.body.query;
 
     return {

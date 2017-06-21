@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import * as cors from 'cors';
 
 import { Application } from 'express';
 import {
@@ -34,7 +35,7 @@ app
   }));
 
 app
-  .use(APP_ROOT, graphqlExpress(request => {
+  .use(APP_ROOT, cors(), graphqlExpress(request => {
     const query = request.query.query || request.body.query;
 
     return {
