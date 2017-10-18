@@ -8,19 +8,31 @@ import { resolvers } from './resolvers';
 
 const rootSchema = [ `
   type Address {
-    country: String              
-    city: String                 
-    zip: String 
-    street: String               
-    address: String              
+    id: Int
+    country: String
+    city: String
+    zip: String
+    street: String
+    address: String
+  }
+
+  type Info {
+    firstname: String
+    address: Address
   }
 
   type Query {
+    info: Info
     address: Address
+  }
+  
+  type Mutation {
+    changeAddress: Address
   }
 
   schema {
     query: Query
+    mutation: Mutation
   }
 ` ];
 

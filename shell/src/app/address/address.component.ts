@@ -3,15 +3,25 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 
 const GetAddress = gql`
-  query GetDecibel {
+  query GetAddress {
+    info {
+      firstname
+      
       address {
-      country
-      city
-      zip
-      street
-      address
+        id
+        zip
+      }
     } 
   }
+`;
+
+const ChangeAddress = gql`
+    mutation ChangeAddress {
+      changeAddress {
+        id
+        country
+      }
+    }
 `;
 
 @Component({
@@ -19,7 +29,7 @@ const GetAddress = gql`
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css']
 })
-export class AddressComponent implements OnInit{
+export class AddressComponent implements OnInit {
   public country: string;
   public city: string;
   public zip: string;
@@ -30,14 +40,20 @@ export class AddressComponent implements OnInit{
 
   ngOnInit() {
     this.apollo.watchQuery<any>({
-      query: GetAddress,
-      pollInterval: 10000
-    }).subscribe(({data}) => {
-      this.country = data.address.country;
-      this.city = data.address.city;
-      this.zip = data.address.zip;
-      this.street = data.address.street;
-      this.address = data.address.address;
+      query: GetAddress
+    }).do(() => {console.log('SIDE EFFECT!!!')}).subscribe(({data}) => {
+      this.country = data.info.address.country;
+      this.city = data.info.address.city;
+      this.zip = data.info.address.zip;
+      this.street = data.info.address.street;
+      this.address = data.info.address.address;
     });
+
+    setTimeout(() => {
+      console.log('mutate');
+      this.apollo.mutate({
+        mutation: ChangeAddress
+      })
+    }, 1000)
   }
 }
