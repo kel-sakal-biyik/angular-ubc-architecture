@@ -6,7 +6,10 @@ const GetAddress = gql`
   query GetAddress {
     info {
       firstname
-      
+      address {
+        id
+        country
+      }
       address {
         id
         zip
